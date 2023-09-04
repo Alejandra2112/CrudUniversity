@@ -1,0 +1,40 @@
+﻿@model CrudUniversity.Models.Inscripcion
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Crear Inscripciones</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdCurso" class="control-label"></label>
+                <select asp-for="IdCurso" class="form-control" asp-items="ViewBag.IdCurso"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdEstudiante" class="control-label"></label>
+                <select asp-for="IdEstudiante" class="form-control" asp-items="ViewBag.IdEstudiante"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="grado" class="control-label"></label>
+                <input asp-for="grado" class="form-control" />
+                <span asp-validation-for="grado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Registrar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

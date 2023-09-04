@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CrudUniversity.Models.Inscripcion>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary"> Crear Inscipción</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Encontrar por nombre: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" />
+            <a asp-action="Index">Volver a la lista</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.grado)
+            </th>
+            <th>
+                Curso
+            </th>
+            <th>
+                Estudiante
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.grado)
+                </td>
+                <td>
+                    @(item.cursos != null ? item.cursos.Titulo : "Sin curso")
+                </td>
+                <td>
+                    @(item.estudiante != null ? item.estudiante.Nombre : "Sin estudiante")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdInscripcion" class="btn btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.IdInscripcion" class="btn btn-secondary">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.IdInscripcion" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
