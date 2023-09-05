@@ -6,10 +6,15 @@ namespace CrudUniversity.Models
     {
         [Key]
         public int IdEstudiante { get; set; }
+
         [Required(ErrorMessage = "Campo Obligatorio")]
-        public String Nombre { get; set; }
+        [RegularExpression(@"^[A-Za-z\s]*$", ErrorMessage = "El nombre solo debe contener letras.")]
+        public string Nombre { get; set; }
+
         [Required(ErrorMessage = "Campo Obligatorio")]
-        public String Apellido { get; set; }
+        [RegularExpression(@"^[A-Za-z\s]*$", ErrorMessage = "El apellido solo debe contener letras")]
+        public string Apellido { get; set; }
+
         [Required(ErrorMessage = "Campo Obligatorio")]
         public DateTime FechaInscripcion { get; set; }
 

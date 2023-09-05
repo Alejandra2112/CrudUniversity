@@ -4,8 +4,8 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Index</h1>
+<body style="background-color: beige; color: purple;">
+<h1>Lista de Inscripciones</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary"> Crear Inscipción</a>
@@ -13,9 +13,9 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Encontrar por nombre: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" />
-            <a asp-action="Index">Volver a la lista</a>
+             <input type="text" name="SearchString" placeholder="Encontrar Por Grupo" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-outline-primary" />
+            <a asp-action="Index" style="text-decoration:none; color:bl">Volver a la lista</a>
         </p>
     </div>
 </form>
@@ -56,3 +56,4 @@
         }
     </tbody>
 </table>
+</body>

@@ -20,11 +20,28 @@ namespace CrudUniversity.Controllers
         }
 
         // GET: Inscripcions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Inscripcion.Include(e => e.cursos).Include(e => e.estudiante);
-            return View(await applicationDbContext.ToListAsync());
+            var query = _context.Inscripcion.Include(e => e.cursos).Include(e => e.estudiante);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStringLower = searchString.ToLower(); // Convertir la búsqueda a minúsculas
+
+                // Obtener todas las inscripciones de la base de datos y luego filtrar en memoria
+                var inscripciones = await query.ToListAsync();
+
+                inscripciones = inscripciones.Where(i =>
+                    i.grado != null && i.grado.ToString().ToLower().Contains(searchStringLower)
+                ).ToList();
+
+                return View(inscripciones);
+            }
+
+            return View(await query.ToListAsync());
         }
+
+
 
         // GET: Inscripcions/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -50,7 +67,8 @@ namespace CrudUniversity.Controllers
         public IActionResult Create()
         {
             ViewData["IdCurso"] = new SelectList(_context.Cursos, "IdCurso", "Titulo");
-            ViewData["IdEstudiante"] = new SelectList(_context.Estudiante, "IdEstudiante", "Nombre"); 
+            ViewData["IdEstudiante"] = new SelectList(_context.Estudiante, "IdEstudiante", "Nombre");
+            ViewData["Grado"] = new SelectList(Enum.GetValues(typeof(grado)).Cast<grado>().ToList());
             return View();
         }
 
@@ -74,6 +92,7 @@ namespace CrudUniversity.Controllers
             }
             ViewData["IdCurso"] = new SelectList(_context.Cursos, "IdCurso", "Titulo", enrollment.IdCurso);
             ViewData["IdEstudiante"] = new SelectList(_context.Estudiante, "IdEstudiante", "Nombre", enrollment.IdEstudiante);
+            ViewData["Grado"] = new SelectList(Enum.GetValues(typeof(grado)).Cast<grado>().ToList());
             return View(enrollment);
         }
 
@@ -93,6 +112,7 @@ namespace CrudUniversity.Controllers
             }
             ViewData["IdCurso"] = new SelectList(_context.Cursos, "IdCurso", "Titulo", inscripcion.IdCurso);
             ViewData["IdEstudiante"] = new SelectList(_context.Estudiante, "IdEstudiante", "Nombre", inscripcion.IdEstudiante);
+            ViewData["Grado"] = new SelectList(Enum.GetValues(typeof(grado)).Cast<grado>().ToList());
             return View(inscripcion);
         }
 
@@ -130,6 +150,7 @@ namespace CrudUniversity.Controllers
             }
             ViewData["IdCurso"] = new SelectList(_context.Cursos, "IdCurso", "Titulo", inscripcion.IdCurso);
             ViewData["IdEstudiante"] = new SelectList(_context.Estudiante, "IdEstudiante", "Nombre", inscripcion.IdEstudiante);
+            ViewData["Grado"] = new SelectList(Enum.GetValues(typeof(grado)).Cast<grado>().ToList());
             return View(inscripcion);
         }
 
@@ -142,7 +163,10 @@ namespace CrudUniversity.Controllers
             }
 
             var inscripcion = await _context.Inscripcion
+                .Include(i => i.estudiante)  
+                 .Include(i => i.cursos)
                 .FirstOrDefaultAsync(m => m.IdInscripcion == id);
+
             if (inscripcion == null)
             {
                 return NotFound();
